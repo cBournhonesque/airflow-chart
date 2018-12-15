@@ -2,6 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  namespace: {{ .Values.persistence.namespace }}
   name: {{ template "airflow.fullname" . }}
   labels:
     app: {{ template "airflow.fullname" . }}

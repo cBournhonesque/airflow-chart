@@ -1,5 +1,4 @@
 # Duplicate this file and put your customization here
-  
 flower:
   resources:
     limits:
@@ -106,7 +105,7 @@ airflow:
     PIP_TRUSTED_HOST: nexus.corp.beno.ai
     AIRFLOW__CORE__EXPOSE_CONFIG: True
     AIRFLOW__CORE__LOAD_EXAMPLES: True
-    AIRFLOW__CORE__AIRFLOW_HOME: /airflow
+    AIRFLOW__CORE__AIRFLOW_HOME: /usr/local/airflow
 
   ##
   ## Configure pod disruption budget for the scheduler
@@ -143,7 +142,7 @@ workers:
     instances: 1
   ##
   ## Directory in which to mount secrets on worker nodes.
-  secretsDir: /airflow/secrets
+  secretsDir: /var/airflow/secrets
   ##
   ## Secrets which will be mounted as a file at `secretsDir/<secret name>`.
   secrets: []
@@ -271,8 +270,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   # storageClass: default
-  metadata:
-    namespace: baiflow
+  namespace: baiflow
   accessMode: ReadWriteMany
   storageClass: "pure-file"
   ##
@@ -286,7 +284,7 @@ dags:
   ##
   ## mount path for persistent volume.
   ## Note that this location is referred to in airflow.cfg, so if you change it, you must update airflow.cfg accordingly.
-  path: /airflow/dags
+  path: /usr/local/airflow/dags
   ##
   ## Set to True to prevent pickling DAGs from scheduler to workers
   doNotPickle: false
@@ -336,7 +334,7 @@ postgresql:
   # uri:
   ##
   ## PostgreSQL hostname
-  ## postgresHost:
+  postgresHost: postgres.baiflow.vlt.beno.ai
   ##
   ## PostgreSQL port
   postgresPort: 5432
@@ -362,6 +360,8 @@ postgresql:
     ##
     ## Access mode:
     accessMode: ReadWriteMany
+    accessModes:
+      - ReadWriteMany
   ##
   ## Resources
   resources:
@@ -371,8 +371,6 @@ postgresql:
     requests:
       cpu: "0.5"
       memory: "512Mi"
-
-
 
 ## Configuration values for the Redis dependency.
 ## ref: https://github.com/kubernetes/charts/blob/master/stable/redis/README.md
@@ -394,6 +392,15 @@ redis:
       ## docker registry secret names (list)
       # pullSecrets: nil
     ##
+    ## Resource configuration
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2G"
+      requests:
+        cpu: "0.5"
+        memory: "512Mi"
+
     ## Configure persistance
     persistence:
       ##
@@ -405,18 +412,11 @@ redis:
       ##
       ## Access mode:
       accessMode: ReadWriteMany
+      accessModes:
+        - ReadWriteMany
+      size: 8Gi
+  
   ##
   ## Disable cluster management by default.
   cluster:
     enabled: false
-  ##
-  ## Resources
-  master:
-    resources:
-      limits:
-        cpu: "1"
-        memory: "2G"
-      requests:
-        cpu: "0.5"
-        memory: "512Mi"
-
