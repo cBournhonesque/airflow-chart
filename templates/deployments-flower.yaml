@@ -41,6 +41,8 @@ spec:
         - name: {{ .Chart.Name }}-flower
           image: {{ .Values.airflow.image.repository }}:{{ .Values.airflow.image.tag }}
           imagePullPolicy: {{ .Values.airflow.image.pullPolicy }}
+          resources:
+{{ toYaml .Values.flower.resources | indent 12 }}
           envFrom:
             - configMapRef:
                 name: "{{ template "airflow.fullname" . }}-env"

@@ -41,6 +41,8 @@ spec:
       initContainers:
         - name: git-clone
           image: alpine/git # Any image with git will do
+          resources:
+{{ toYaml .Values.web.initContainer.resources | indent 12 }}
           command:
             - /usr/local/git/git-clone.sh
           args:
@@ -57,6 +59,8 @@ spec:
         - name: {{ .Chart.Name }}-web
           image: {{ .Values.airflow.image.repository }}:{{ .Values.airflow.image.tag }}
           imagePullPolicy: {{ .Values.airflow.image.pullPolicy}}
+          resources:
+{{ toYaml .Values.web.resources | indent 12 }}
           ports:
             - name: web
               containerPort: 8080
