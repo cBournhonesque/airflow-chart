@@ -5,7 +5,7 @@ flower:
       cpu: "1"
       memory: "2G"
     requests:
-      cpu: "0.5"
+      cpu: "1"
       memory: "512Mi"
 
 scheduler:
@@ -14,7 +14,7 @@ scheduler:
       cpu: "1"
       memory: "2G"
     requests:
-      cpu: "0.5"
+      cpu: "1"
       memory: "512Mi"
 
 web:
@@ -34,7 +34,7 @@ airflow:
   ## Generate fernetKey with:
   ##    python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)"
   ## fernetKey: ABCDABCDABCDABCDABCDABCDABCDABCDABCDABCD
-  fernetKey: ""
+  fernetKey: WTGIC9Gr2PaAKtqtcjDzrMvNvmMaXTrUeeDx7ozKqPs=
   service:
     type: ClusterIP
   ##
@@ -43,7 +43,7 @@ airflow:
   executor: Celery
   ##
   ## set the max number of retries during container initialization
-  initRetryLoop:
+  initRetryLoop: 3
   ##
   ## base image for webserver/scheduler/workers
   ## Note: If you want to use airflow HEAD (2.0dev), use the following image:
@@ -78,7 +78,7 @@ airflow:
   ##
   ## If set to a value != -1, you will see your scheduler regularly restart. This is its normal
   ## behavior under these conditions.
-  schedulerNumRuns: "-1"
+  schedulerNumRuns: "5"
   ##
   ## Set schedulerDoPickle to toggle whether to have the scheduler
   ## attempt to pickle the DAG object to send over to the workers,
@@ -320,6 +320,7 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the fullname template
   name: tiller
 
+
 ##
 ## Configuration values for the postgresql dependency.
 ## ref: https://github.com/kubernetes/charts/blob/master/stable/postgresql/README.md
@@ -328,32 +329,37 @@ postgresql:
   ## Use the PostgreSQL chart dependency.
   ## Set to false if bringing your own PostgreSQL.
   enabled: true
+  ## Additional configuration
+  postgresqlConfiguration:
+    listen_addresses: "'*'"
+
   ##
   ## If bringing your own PostgreSQL, the full uri to use
   ## e.g. postgres://airflow:changeme@my-postgres.com:5432/airflow?sslmode=disable
   # uri:
   ##
   ## PostgreSQL hostname
-  postgresHost: postgres.baiflow.vlt.beno.ai
+  postgresqlHost: postgres.baiflow.vlt.beno.ai
   ##
   ## PostgreSQL port
-  postgresPort: 5432
+  service:
+    port: 5432
   ## PostgreSQL User to create.
-  postgresUser: postgres
+  postgresqlUser: postgres
   ##
   ## PostgreSQL Password for the new user.
   ## If not set, a random 10 characters password will be used.
-  postgresPassword: airflow
+  postgresqlPassword: airflow
   ##
   ## PostgreSQL Database to create.
-  postgresDatabase: airflow
+  postgresqlDatabase: airflow
   ##
   ## Persistent Volume Storage configuration.
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes
   persistence:
     ##
     ## Enable PostgreSQL persistence using Persistent Volume Claims.
-    enabled: true
+    enabled: false
     ##
     ## Persistant class
     storageClass: "pure-file"

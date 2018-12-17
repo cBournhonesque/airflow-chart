@@ -33,12 +33,12 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Create a default fully qualified postgresql name or use the `postgresHost` value if defined.
+Create a default fully qualified postgresql name or use the `postgresqlHost` value if defined.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "airflow.postgresql.fullname" -}}
-{{- if .Values.postgresql.postgresHost }}
-    {{- printf "%s" .Values.postgresql.postgresHost -}}
+{{- if .Values.postgresql.postgresqlHost }}
+    {{- printf "%s" .Values.postgresql.postgresqlHost -}}
 {{- else }}
     {{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
     {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
