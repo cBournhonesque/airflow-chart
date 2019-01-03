@@ -70,7 +70,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "airflow.fullname" . }}
-                  key: postgresqlUser
+                  key: postgresqlUsername
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:

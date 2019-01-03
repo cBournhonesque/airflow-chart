@@ -78,7 +78,7 @@ airflow:
   ##
   ## If set to a value != -1, you will see your scheduler regularly restart. This is its normal
   ## behavior under these conditions.
-  schedulerNumRuns: "5"
+  schedulerNumRuns: "-1"
   ##
   ## Set schedulerDoPickle to toggle whether to have the scheduler
   ## attempt to pickle the DAG object to send over to the workers,
@@ -339,13 +339,13 @@ postgresql:
   # uri:
   ##
   ## PostgreSQL hostname
-  postgresqlHost: postgres.baiflow.vlt.beno.ai
+  postgresqlHost: baiflow-postgresql.baiflow.svc.cluster.local
   ##
   ## PostgreSQL port
   service:
     port: 5432
   ## PostgreSQL User to create.
-  postgresqlUser: postgres
+  postgresqlUsername: postgres
   ##
   ## PostgreSQL Password for the new user.
   ## If not set, a random 10 characters password will be used.
@@ -359,7 +359,7 @@ postgresql:
   persistence:
     ##
     ## Enable PostgreSQL persistence using Persistent Volume Claims.
-    enabled: false
+    enabled: true
     ##
     ## Persistant class
     storageClass: "pure-file"
